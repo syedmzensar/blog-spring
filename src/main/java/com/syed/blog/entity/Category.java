@@ -16,16 +16,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class User {
+public class Category {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-	private String name;
-	private String email;
-	private String password;
-	private String about;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int categoryId;
+	private String categoryTitle;
+	private String categoryDescription;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	List<User> user = new ArrayList<>();
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+	List<Post> post = new ArrayList<>();
 }
