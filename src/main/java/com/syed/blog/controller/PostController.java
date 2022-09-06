@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.syed.blog.dto.PostDto;
+import com.syed.blog.payload.PostResponse;
 import com.syed.blog.service.PostService;
 
 @RestController
@@ -47,8 +49,13 @@ public class PostController {
 
 	// GET - get all posts
 	@GetMapping("/posts")
-	public ResponseEntity<List<PostDto>> getAllPosts() {
-		return new ResponseEntity<List<PostDto>>(this.postService.getAllPosts(), HttpStatus.OK);
+	public ResponseEntity<PostResponse> getAllPosts(
+
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize
+
+	) {
+		return new ResponseEntity<PostResponse>(this.postService.getAllPosts(pageNumber, pageSize), HttpStatus.OK);
 	}
 
 	// GET - get post by id
@@ -68,4 +75,11 @@ public class PostController {
 	public ResponseEntity<List<PostDto>> getPostByCategory(@PathVariable Integer categoryId) {
 		return new ResponseEntity<List<PostDto>>(this.postService.getPostsByCategory(categoryId), HttpStatus.OK);
 	}
+
+	// GET - search post by title
+	@GetMapping("/post/title/{keyword}")
+	public ResponseEntity<List<PostDto>> searchPosts(@PathVariable String keyword) {
+		return new ResponseEntity<List<PostDto>>(this.postService.searchPosts(keyword), HttpStatus.OK);
+	}
+
 }
